@@ -1,0 +1,652 @@
+{
+  "nombre": "GYM LAB",
+  "version": 1,
+
+  "fases": [
+    { "id": "base",       "nombre": "Base",       "semanas": [1, 2, 3], "series": 3, "descanso": 90, "reserva": 3, "color": "#3d8bff" },
+    { "id": "desarrollo", "nombre": "Desarrollo", "semanas": [4, 5, 6], "series": 3, "descanso": 90, "reserva": 2, "color": "#ff9a1f" },
+    { "id": "choque",     "nombre": "Choque",     "semanas": [7, 8, 9], "series": 4, "descanso": 75, "reserva": 1, "color": "#ff4040" },
+    { "id": "descarga",   "nombre": "Descarga",   "semanas": [10],      "series": 2, "descanso": 90, "reserva": 4, "color": "#2ecc71", "usaEjerciciosDe": "desarrollo", "nota": "4 (se usan los ejercicios de Desarrollo)" },
+    { "id": "desafio",    "nombre": "Desafío",    "semanas": [11],      "series": null, "descanso": null, "reserva": null, "color": "#c77dff" }
+  ],
+
+  "ordenSemanal": ["superiorA", "inferiorA", "superiorB", "inferiorB"],
+  "ordenSemanalTexto": "Superior A, Inferior A, Superior B, Inferior B, con un día de descanso entre el bloque de lunes y martes y el de jueves y viernes.",
+  "descansoDespuesDe": ["inferiorA", "inferiorB"],
+
+  "abreviaturas": { "PP": "por pierna", "PB": "por brazo", "PL": "por lado" },
+
+  "opcionesBanda": ["larga", "media", "corta", "doble"],
+
+  "avisos": {
+    "codo": "Agarrar la banda con la mano abierta o pasarla por la muñeca. Si las flexiones molestan, hacerlas sobre los puños o con las manos giradas hacia afuera. Molestia máxima de 3 sobre 10, sin empeorar al día siguiente; si pasa de eso, sacar el ejercicio.",
+    "rodillas": "Trabajar solo en el rango sin dolor, con la rodilla alineada con el pie y sin saltos.",
+    "banda": "Revisar antes de cada sesión que no tenga cortes, y en los tirones que no quede a la altura de la cara."
+  },
+
+  "calentamiento": {
+    "titulo": "Calentamiento",
+    "ejercicios": [
+      { "nombre": "Círculos de hombros", "segundos": 45, "como": "Parado, brazos sueltos. Dibujá círculos grandes con los hombros, primero hacia atrás y después hacia adelante." },
+      { "nombre": "Rotación de muñecas suave", "segundos": 45, "como": "Entrelazá los dedos y girá las muñecas despacio para los dos lados. Sin forzar: cuidá el codo." },
+      { "nombre": "Círculos de cadera", "segundos": 45, "como": "Manos en la cintura, pies al ancho de la cadera. Dibujá círculos amplios con la cadera, la mitad del tiempo para cada lado." },
+      { "nombre": "Sentadilla parcial lenta", "segundos": 45, "como": "Bajá hasta la mitad del recorrido en 3 segundos y subí. Rodillas alineadas con los pies, solo en el rango sin dolor." },
+      { "nombre": "Gato-vaca", "segundos": 45, "como": "En cuatro apoyos sobre el mat. Redondeá la espalda mirando el ombligo y después hundila mirando adelante, siguiendo la respiración." }
+    ],
+    "videos": [
+      { "titulo": "Calentamiento: video general", "url": "https://www.youtube.com/watch?v=OIZkKf6LBoY" },
+      { "titulo": "Calentamiento: ejemplo 1", "url": "https://youtu.be/KbxWY89ON0Y" },
+      { "titulo": "Calentamiento: ejemplo 2", "url": "https://youtu.be/e-soiHDEe3I" },
+      { "titulo": "Calentamiento: ejemplo 3", "url": "https://youtu.be/NxE2v3FyuO8" },
+      { "titulo": "Calentamiento: ejemplo 4", "url": "https://youtu.be/srMT7hoxlrA" },
+      { "titulo": "Calentamiento: ejemplo 5", "url": "https://youtu.be/bhs5O-UvyXo" },
+      { "titulo": "Calentamiento: ejemplo 6", "url": "https://youtu.be/u7OKcQ2Qd6k" },
+      { "titulo": "Calentamiento: ejemplo 7", "url": "https://youtu.be/oJ28dRD8N6k" }
+    ]
+  },
+
+  "estiramientos": {
+    "titulo": "Estiramiento final",
+    "ejercicios": [
+      { "nombre": "Isquiotibiales", "segundos": 30, "porLado": true,  "como": "Sentado en el mat, una pierna estirada y la otra doblada. Inclinate hacia adelante con la espalda larga hasta sentir la parte de atrás del muslo." },
+      { "nombre": "Cuádriceps", "segundos": 30, "porLado": true,  "como": "Parado, agarrate de la silla. Llevá el talón hacia la cola sin que la rodilla se vaya hacia afuera. Si la rodilla molesta, hacelo acostado de costado." },
+      { "nombre": "Pecho en marco de puerta", "segundos": 30, "porLado": true,  "como": "Antebrazo apoyado en el marco, codo a la altura del hombro. Girá el cuerpo hacia el lado contrario hasta sentir el pecho." },
+      { "nombre": "Dorsal", "segundos": 30, "porLado": true,  "como": "Parado o de rodillas, un brazo arriba. Inclinate hacia el lado contrario hasta sentir el costado de la espalda." },
+      { "nombre": "Glúteo", "segundos": 30, "porLado": true,  "como": "Acostado boca arriba, cruzá el tobillo sobre la rodilla contraria y acercá las piernas al pecho." }
+    ],
+    "videos": [
+      { "titulo": "Estiramientos: ejemplo 1", "url": "https://www.youtube.com/watch?v=839l6ErHaUc" },
+      { "titulo": "Estiramientos: ejemplo 2", "url": "https://youtu.be/fpawjELJDhY" }
+    ]
+  },
+
+  "sesiones": {
+    "superiorA": {
+      "nombre": "Superior A",
+      "subtitulo": "Pecho y hombros",
+      "ejercicios": [
+        {
+          "id": "flexionesA",
+          "nombre": "Flexiones",
+          "zona": "brazo",
+          "indicacion": "Cuerpo recto de la cabeza a los talones, codos a 45° del cuerpo.",
+          "como": [
+            "Manos un poco más abiertas que los hombros, sobre el mat.",
+            "Apretá la cola y el abdomen: el cuerpo es una tabla.",
+            "Bajá hasta que el pecho casi toque el piso, con los codos a 45° del cuerpo (no abiertos en cruz).",
+            "Empujá el piso y subí sin que la cadera se hunda.",
+            "En rodillas: igual, pero apoyando las rodillas en el mat y con la cadera alineada."
+          ],
+          "videos": [
+            { "titulo": "Flexiones completas", "url": "https://youtube.com/shorts/l0VuGojWLas" },
+            { "titulo": "Flexiones en rodillas", "url": "https://youtube.com/shorts/4AqLlKKoydA" },
+            { "titulo": "Flexiones bajando lento", "url": "https://youtube.com/shorts/BtNIQqLVUGY" }
+          ],
+          "alternativas": [
+            { "id": "punos", "nombre": "Sobre los puños", "como": "Igual que la flexión, apoyando los puños cerrados con la muñeca recta." },
+            { "id": "manosAfuera", "nombre": "Con las manos giradas hacia afuera", "como": "Igual que la flexión, con los dedos apuntando hacia afuera." }
+          ],
+          "fases": {
+            "base":       { "texto": "Las completas que salgan y seguir en rodillas hasta 10 en total", "tipo": "mixta", "total": 10 },
+            "desarrollo": { "texto": "Completas bajando en 3\", 5 a 8", "tipo": "reps", "min": 5, "max": 8, "ritmo": [ { "paso": "bajar", "s": 3 }, { "paso": "subir", "s": 1 } ] },
+            "choque":     { "texto": "Completas con pausa abajo de 2\", 8 a 12", "tipo": "reps", "min": 8, "max": 12, "ritmo": [ { "paso": "bajar", "s": 2 }, { "paso": "pausa", "s": 2 }, { "paso": "subir", "s": 1 } ] }
+          }
+        },
+        {
+          "id": "remoSentado",
+          "nombre": "Remo sentado en el mat con la banda larga en los pies",
+          "zona": "brazo",
+          "indicacion": "Espalda alta, tirá con los codos pegados y juntá los omóplatos.",
+          "como": [
+            "Sentado en el mat con las piernas estiradas y la banda larga pasada por las plantas de los pies.",
+            "Agarrá la banda con la mano abierta o pasala por la muñeca.",
+            "Con la espalda recta, tirá llevando los codos hacia atrás, pegados al cuerpo.",
+            "Juntá los omóplatos al final y volvé despacio sin redondear la espalda."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "12 a 15", "tipo": "reps", "min": 12, "max": 15, "banda": true },
+            "desarrollo": { "texto": "Bajando en 3\", 10 a 12", "tipo": "reps", "min": 10, "max": 12, "banda": true, "ritmo": [ { "paso": "subir", "s": 1, "dice": "Tirá" }, { "paso": "bajar", "s": 3, "dice": "Volvé" } ] },
+            "choque":     { "texto": "Pausa de 2\" atrás, 12", "tipo": "reps", "min": 12, "max": 12, "banda": true, "ritmo": [ { "paso": "subir", "s": 1, "dice": "Tirá" }, { "paso": "pausa", "s": 2, "dice": "Sostené" }, { "paso": "bajar", "s": 2, "dice": "Volvé" } ] }
+          }
+        },
+        {
+          "id": "pica",
+          "nombre": "Flexión en pica",
+          "zona": "brazo",
+          "indicacion": "Cadera arriba, bajá la cabeza entre las manos.",
+          "como": [
+            "Desde la posición de flexión, caminá con los pies hacia las manos y subí la cadera: el cuerpo forma una V invertida.",
+            "Manos al ancho de los hombros.",
+            "Doblá los codos y bajá la cabeza hacia el piso, por delante de las manos.",
+            "Empujá y volvé arriba sin bajar la cadera.",
+            "Con pies en silla: igual, con los pies apoyados en la silla y la cadera bien arriba."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "manosAfuera", "nombre": "Con las manos giradas hacia afuera", "como": "Igual, con los dedos apuntando hacia afuera para aliviar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "6", "tipo": "reps", "min": 6, "max": 6 },
+            "desarrollo": { "texto": "8 a 10", "tipo": "reps", "min": 8, "max": 10 },
+            "choque":     { "texto": "Pies en silla, 6 a 8", "tipo": "reps", "min": 6, "max": 8 }
+          }
+        },
+        {
+          "id": "pressBanda",
+          "nombre": "Press de pecho con la banda larga por la espalda",
+          "zona": "brazo",
+          "indicacion": "La banda pasa por debajo de los omóplatos. Empujá al frente sin trabar los codos.",
+          "como": [
+            "Pasá la banda larga por la espalda, a la altura de los omóplatos, y agarrá una punta con cada mano.",
+            "Parado o de rodillas, manos a la altura del pecho.",
+            "Empujá hacia adelante hasta casi estirar los brazos, sin trabar los codos.",
+            "Volvé despacio hasta el pecho."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "12 a 15", "tipo": "reps", "min": 12, "max": 15, "banda": true },
+            "desarrollo": { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "choque":     { "texto": "Bajando en 3\", 12", "tipo": "reps", "min": 12, "max": 12, "banda": true, "ritmo": [ { "paso": "subir", "s": 1, "dice": "Empujá" }, { "paso": "bajar", "s": 3, "dice": "Volvé" } ] }
+          }
+        },
+        {
+          "id": "aperturasFrente",
+          "nombre": "Aperturas con la banda larga a la altura de la frente",
+          "zona": "brazo",
+          "indicacion": "Brazos casi estirados, abrí separando la banda y juntá los omóplatos.",
+          "como": [
+            "Parado, agarrá la banda con las manos al ancho de los hombros, a la altura de la frente.",
+            "Con los brazos casi estirados, abrilos hacia los costados estirando la banda.",
+            "Juntá los omóplatos al final, sin subir los hombros.",
+            "Volvé despacio. La banda no tiene que quedar a la altura de la cara."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "desarrollo": { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "choque":     { "texto": "20", "tipo": "reps", "min": 20, "max": 20, "banda": true }
+          }
+        },
+        {
+          "id": "triceps",
+          "nombre": "Extensión de tríceps sobre la cabeza pisando la banda, liviana",
+          "zona": "brazo",
+          "indicacion": "Codos fijos al lado de la cabeza. Solo se mueve el antebrazo.",
+          "como": [
+            "Pisá la banda con un pie y llevala por detrás de la espalda, con las manos detrás de la cabeza.",
+            "Codos apuntando al techo, cerca de las orejas.",
+            "Estirá los brazos hacia arriba sin mover los codos.",
+            "Bajá despacio. Banda liviana: es un ejercicio sensible para el codo."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "12", "tipo": "reps", "min": 12, "max": 12, "banda": true },
+            "desarrollo": { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "choque":     { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true }
+          }
+        }
+      ]
+    },
+
+    "superiorB": {
+      "nombre": "Superior B",
+      "subtitulo": "Espalda y brazos",
+      "ejercicios": [
+        {
+          "id": "jalon",
+          "nombre": "Jalón de rodillas: estirar la banda larga por encima de la cabeza y bajarla a la nuca",
+          "zona": "brazo",
+          "indicacion": "Estirá la banda arriba y bajá los codos hacia las costillas.",
+          "como": [
+            "De rodillas sobre el mat, agarrá la banda larga con las manos más abiertas que los hombros.",
+            "Subí los brazos por encima de la cabeza estirando la banda.",
+            "Bajá la banda por detrás de la cabeza hasta la nuca, llevando los codos hacia las costillas.",
+            "Subí despacio sin soltar la tensión."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "12 a 15", "tipo": "reps", "min": 12, "max": 15, "banda": true },
+            "desarrollo": { "texto": "Bajando en 3\", 10 a 12", "tipo": "reps", "min": 10, "max": 12, "banda": true, "ritmo": [ { "paso": "bajar", "s": 3 }, { "paso": "subir", "s": 1 } ] },
+            "choque":     { "texto": "Pausa de 2\" abajo, 10", "tipo": "reps", "min": 10, "max": 10, "banda": true, "ritmo": [ { "paso": "bajar", "s": 2 }, { "paso": "pausa", "s": 2 }, { "paso": "subir", "s": 1 } ] }
+          }
+        },
+        {
+          "id": "remoBrazo",
+          "nombre": "Remo a un brazo inclinado pisando la banda larga",
+          "zona": "brazo",
+          "lado": "PB",
+          "indicacion": "Espalda recta inclinada. Llevá el codo hacia atrás, pegado al cuerpo.",
+          "como": [
+            "Pisá la banda larga con un pie y adelantá esa pierna, como en una estocada corta.",
+            "Inclinate hacia adelante con la espalda recta y apoyá la otra mano en el muslo.",
+            "Tirá de la banda llevando el codo hacia atrás, cerca de la cintura.",
+            "Volvé despacio. Al terminar, cambiá de brazo."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "12 PB", "tipo": "reps", "min": 12, "max": 12, "banda": true },
+            "desarrollo": { "texto": "12 PB", "tipo": "reps", "min": 12, "max": 12, "banda": true },
+            "choque":     { "texto": "Pausa de 2\", 10 PB", "tipo": "reps", "min": 10, "max": 10, "banda": true, "ritmo": [ { "paso": "subir", "s": 1, "dice": "Tirá" }, { "paso": "pausa", "s": 2, "dice": "Sostené" }, { "paso": "bajar", "s": 2, "dice": "Volvé" } ] }
+          }
+        },
+        {
+          "id": "flexionesB",
+          "nombre": "Flexiones",
+          "zona": "brazo",
+          "indicacion": "Cuerpo recto de la cabeza a los talones, codos a 45° del cuerpo.",
+          "como": [
+            "Manos un poco más abiertas que los hombros, sobre el mat.",
+            "Apretá la cola y el abdomen: el cuerpo es una tabla.",
+            "Bajá hasta que el pecho casi toque el piso, con los codos a 45° del cuerpo.",
+            "Empujá el piso y subí sin que la cadera se hunda.",
+            "En rodillas: igual, pero apoyando las rodillas en el mat y con la cadera alineada."
+          ],
+          "videos": [
+            { "titulo": "Flexiones en rodillas", "url": "https://youtube.com/shorts/4AqLlKKoydA" },
+            { "titulo": "Flexiones completas", "url": "https://youtube.com/shorts/l0VuGojWLas" }
+          ],
+          "alternativas": [
+            { "id": "punos", "nombre": "Sobre los puños", "como": "Igual que la flexión, apoyando los puños cerrados con la muñeca recta." },
+            { "id": "manosAfuera", "nombre": "Con las manos giradas hacia afuera", "como": "Igual que la flexión, con los dedos apuntando hacia afuera." }
+          ],
+          "fases": {
+            "base":       { "texto": "En rodillas sobre el mat, 10 a 12", "tipo": "reps", "min": 10, "max": 12 },
+            "desarrollo": { "texto": "5 completas y seguir en rodillas hasta 12", "tipo": "mixta", "completas": 5, "total": 12 },
+            "choque":     { "texto": "Completas, 8 a 12", "tipo": "reps", "min": 8, "max": 12 }
+          }
+        },
+        {
+          "id": "aperturasPecho",
+          "nombre": "Aperturas con la banda larga a la altura del pecho",
+          "zona": "brazo",
+          "indicacion": "Brazos casi estirados, abrí separando la banda y juntá los omóplatos.",
+          "como": [
+            "Parado, agarrá la banda con las manos al ancho de los hombros, a la altura del pecho.",
+            "Con los brazos casi estirados, abrilos hacia los costados estirando la banda hasta que toque el pecho.",
+            "Juntá los omóplatos al final, sin subir los hombros.",
+            "Volvé despacio."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "desarrollo": { "texto": "20", "tipo": "reps", "min": 20, "max": 20, "banda": true },
+            "choque":     { "texto": "25", "tipo": "reps", "min": 25, "max": 25, "banda": true }
+          }
+        },
+        {
+          "id": "curlMartillo",
+          "nombre": "Curl martillo pisando la banda, liviano",
+          "zona": "brazo",
+          "indicacion": "Palmas enfrentadas, codos pegados. Subí sin balancear el cuerpo.",
+          "como": [
+            "Pisá la banda con los dos pies y agarrá las puntas con las palmas mirándose (como quien agarra un martillo).",
+            "Codos pegados al cuerpo.",
+            "Doblá los codos y subí las manos hacia los hombros sin balancearte.",
+            "Bajá despacio. Banda liviana: cuidá el codo."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "muneca", "nombre": "Con la banda pasada por la muñeca", "como": "Igual, sin cerrar la mano: la banda pasa por la muñeca para no cargar el codo." }
+          ],
+          "fases": {
+            "base":       { "texto": "12", "tipo": "reps", "min": 12, "max": 12, "banda": true },
+            "desarrollo": { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "choque":     { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true }
+          }
+        },
+        {
+          "id": "planchaHombros",
+          "nombre": "Plancha tocando hombros",
+          "zona": "brazo",
+          "lado": "PB",
+          "alterna": true,
+          "indicacion": "En plancha alta, tocá el hombro contrario sin mover la cadera.",
+          "como": [
+            "Plancha con brazos estirados, manos debajo de los hombros y pies un poco abiertos.",
+            "Levantá una mano y tocá el hombro contrario.",
+            "Volvé y repetí con la otra mano, alternando.",
+            "La cadera no se balancea: apretá abdomen y cola. Contá por brazo."
+          ],
+          "videos": [
+            { "titulo": "Plancha tocando hombros", "url": "https://youtube.com/shorts/6wdHepig6ps" }
+          ],
+          "alternativas": [
+            { "id": "punos", "nombre": "Sobre los puños", "como": "Igual, con los puños cerrados y la muñeca recta." }
+          ],
+          "fases": {
+            "base":       { "texto": "5 PB", "tipo": "reps", "min": 5, "max": 5 },
+            "desarrollo": { "texto": "8 PB", "tipo": "reps", "min": 8, "max": 8 },
+            "choque":     { "texto": "10 PB", "tipo": "reps", "min": 10, "max": 10 }
+          }
+        }
+      ]
+    },
+
+    "inferiorA": {
+      "nombre": "Inferior A",
+      "subtitulo": "Cuádriceps",
+      "ejercicios": [
+        {
+          "id": "sentadillaSilla",
+          "nombre": "Sentadilla a silla",
+          "zona": "pierna",
+          "indicacion": "Cola atrás, rozá la silla y subí. Rodillas alineadas con los pies.",
+          "como": [
+            "Parado delante de la silla, pies al ancho de la cadera.",
+            "Llevá la cola hacia atrás y abajo, como para sentarte.",
+            "Rozá la silla sin dejarte caer y subí empujando con todo el pie.",
+            "Rodillas siempre en la línea de los pies, solo en el rango sin dolor.",
+            "Con banda: pisala con los dos pies y sostené las puntas a la altura de los hombros."
+          ],
+          "videos": [
+            { "titulo": "Sentadilla a silla", "url": "https://youtube.com/shorts/8_4t-kPsTOY" },
+            { "titulo": "Sentadilla", "url": "https://youtube.com/shorts/K8QloAmnXOg" }
+          ],
+          "alternativas": [
+            { "id": "rangoCorto", "nombre": "Rango corto, sin llegar a la silla", "como": "Igual, bajando solo hasta donde no hay dolor." }
+          ],
+          "fases": {
+            "base":       { "texto": "12 a 15", "tipo": "reps", "min": 12, "max": 15 },
+            "desarrollo": { "texto": "Pausa de 2\" abajo, 12", "tipo": "reps", "min": 12, "max": 12, "ritmo": [ { "paso": "bajar", "s": 2 }, { "paso": "pausa", "s": 2 }, { "paso": "subir", "s": 1 } ] },
+            "choque":     { "texto": "Con la banda larga bajo los pies, 12 a 15", "tipo": "reps", "min": 12, "max": 15, "banda": true }
+          }
+        },
+        {
+          "id": "pared",
+          "nombre": "Sentadilla isométrica en pared",
+          "zona": "pierna",
+          "indicacion": "Espalda pegada a la pared, quieto. Rodillas sobre los tobillos.",
+          "como": [
+            "Apoyá la espalda en la pared y adelantá los pies.",
+            "Bajá deslizando la espalda hasta donde no haya dolor (como máximo, muslos paralelos al piso).",
+            "Rodillas encima de los tobillos y alineadas con los pies.",
+            "Quedate quieto respirando hasta que termine el tiempo."
+          ],
+          "videos": [
+            { "titulo": "Sentadilla isométrica", "url": "https://youtube.com/shorts/cTe7hRu-t_c" },
+            { "titulo": "Sentadilla isométrica alta", "url": "https://youtube.com/shorts/akwA_nClKu4" }
+          ],
+          "alternativas": [
+            { "id": "alta", "nombre": "Más alta", "como": "Igual, con la cadera más arriba de las rodillas (ángulo más abierto)." }
+          ],
+          "fases": {
+            "base":       { "texto": "30\"", "tipo": "tiempo", "segundos": 30 },
+            "desarrollo": { "texto": "45\"", "tipo": "tiempo", "segundos": 45 },
+            "choque":     { "texto": "60\"", "tipo": "tiempo", "segundos": 60 }
+          }
+        },
+        {
+          "id": "bulgara",
+          "nombre": "Sentadilla búlgara con el pie atrás en la silla, rango corto",
+          "zona": "pierna",
+          "lado": "PP",
+          "indicacion": "Rango corto. Rodilla de adelante alineada con el pie, torso apenas inclinado.",
+          "como": [
+            "De espaldas a la silla, apoyá el empeine de un pie sobre el asiento.",
+            "La pierna de adelante queda lo bastante lejos para que la rodilla no pase mucho la punta del pie.",
+            "Bajá poco, en rango corto, y subí empujando con el talón de adelante.",
+            "Al terminar, cambiá de pierna."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "estocadaEstatica", "nombre": "Estocada estática corta con la rodilla sobre el mat doblado", "como": "Un pie adelante y otro atrás, la rodilla de atrás baja hacia el mat doblado. Bajá y subí sin mover los pies, en rango corto." }
+          ],
+          "fases": {
+            "base":       { "texto": "8 PP", "tipo": "reps", "min": 8, "max": 8 },
+            "desarrollo": { "texto": "10 PP", "tipo": "reps", "min": 10, "max": 10 },
+            "choque":     { "texto": "12 PP", "tipo": "reps", "min": 12, "max": 12 }
+          }
+        },
+        {
+          "id": "puenteBanda",
+          "nombre": "Puente de glúteo con la banda corta en las rodillas",
+          "zona": "pierna",
+          "indicacion": "Empujá con los talones, apretá la cola arriba y abrí las rodillas contra la banda.",
+          "como": [
+            "Acostado boca arriba en el mat, rodillas dobladas y la banda corta arriba de las rodillas.",
+            "Empujá el piso con los talones y subí la cadera hasta alinear rodillas, cadera y hombros.",
+            "Arriba apretá la cola y mantené las rodillas abiertas contra la banda.",
+            "Bajá despacio.",
+            "A una pierna: la otra pierna queda estirada o doblada en el aire."
+          ],
+          "videos": [
+            { "titulo": "Puente de glúteo", "url": "https://youtube.com/shorts/huNMPu1FYNc" },
+            { "titulo": "Puente de glúteo a una pierna", "url": "https://youtube.com/shorts/Wj4mnwRQqdU" }
+          ],
+          "alternativas": [
+            { "id": "dosPiernas", "nombre": "A dos piernas", "como": "Igual, con los dos pies apoyados." }
+          ],
+          "fases": {
+            "base":       { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "desarrollo": { "texto": "A una pierna, 10 PP", "tipo": "reps", "min": 10, "max": 10, "lado": "PP", "banda": true },
+            "choque":     { "texto": "A una pierna con pausa, 12 PP", "tipo": "reps", "min": 12, "max": 12, "lado": "PP", "banda": true, "ritmo": [ { "paso": "subir", "s": 1 }, { "paso": "pausa", "s": 2 }, { "paso": "bajar", "s": 2 } ] }
+          }
+        },
+        {
+          "id": "talones",
+          "nombre": "Elevación de talones",
+          "zona": "pierna",
+          "indicacion": "Subí bien alto en puntas de pie y bajá controlado.",
+          "como": [
+            "Parado, apoyá una mano en la silla o la pared para el equilibrio.",
+            "Subí en puntas de pie lo más alto que puedas.",
+            "Bajá despacio hasta apoyar el talón.",
+            "A una pierna: la otra queda doblada en el aire. Al terminar, cambiá."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "dosPiernas", "nombre": "A dos piernas", "como": "Igual, con los dos pies en el piso." }
+          ],
+          "fases": {
+            "base":       { "texto": "15", "tipo": "reps", "min": 15, "max": 15 },
+            "desarrollo": { "texto": "A una pierna, 12 PP", "tipo": "reps", "min": 12, "max": 12, "lado": "PP" },
+            "choque":     { "texto": "Pausa arriba, 15 PP", "tipo": "reps", "min": 15, "max": 15, "lado": "PP", "ritmo": [ { "paso": "subir", "s": 1 }, { "paso": "pausa", "s": 2 }, { "paso": "bajar", "s": 2 } ] }
+          }
+        },
+        {
+          "id": "hueca",
+          "nombre": "Posición hueca",
+          "zona": null,
+          "indicacion": "Zona lumbar pegada al mat. Hombros y piernas despegados.",
+          "como": [
+            "Acostado boca arriba en el mat.",
+            "Pegá la zona lumbar al piso apretando el abdomen.",
+            "Despegá hombros y piernas del piso, brazos estirados hacia los pies o por encima de la cabeza.",
+            "Quedate quieto. Si la lumbar se despega, doblá un poco las rodillas."
+          ],
+          "videos": [
+            { "titulo": "Posición hueca", "url": "https://youtube.com/shorts/vb7Zl3xHOEI" }
+          ],
+          "alternativas": [
+            { "id": "rodillasDobladas", "nombre": "Con las rodillas dobladas", "como": "Igual, con las rodillas dobladas a 90° en el aire." }
+          ],
+          "fases": {
+            "base":       { "texto": "20\"", "tipo": "tiempo", "segundos": 20 },
+            "desarrollo": { "texto": "30\"", "tipo": "tiempo", "segundos": 30 },
+            "choque":     { "texto": "40\"", "tipo": "tiempo", "segundos": 40 }
+          }
+        }
+      ]
+    },
+
+    "inferiorB": {
+      "nombre": "Inferior B",
+      "subtitulo": "Glúteos e isquiotibiales",
+      "ejercicios": [
+        {
+          "id": "rumano",
+          "nombre": "Peso muerto rumano con la banda larga bajo los pies",
+          "zona": "pierna",
+          "indicacion": "Cadera atrás, espalda recta, rodillas apenas dobladas.",
+          "como": [
+            "Pisá la banda larga con los pies al ancho de la cadera y agarrá las puntas.",
+            "Rodillas apenas dobladas, que no se muevan.",
+            "Llevá la cadera hacia atrás e inclinate con la espalda recta hasta sentir la parte de atrás del muslo.",
+            "Subí empujando la cadera hacia adelante y apretá la cola.",
+            "A una pierna: la otra va hacia atrás, en línea con el cuerpo."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "rangoCorto", "nombre": "Rango corto", "como": "Igual, bajando solo hasta la altura de las rodillas." }
+          ],
+          "fases": {
+            "base":       { "texto": "15", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "desarrollo": { "texto": "Bajando en 3\", 12", "tipo": "reps", "min": 12, "max": 12, "banda": true, "ritmo": [ { "paso": "bajar", "s": 3 }, { "paso": "subir", "s": 1 } ] },
+            "choque":     { "texto": "A una pierna, 10 PP", "tipo": "reps", "min": 10, "max": 10, "lado": "PP", "banda": true }
+          }
+        },
+        {
+          "id": "curlFemoral",
+          "nombre": "Curl femoral con toalla en piso liso, fuera del mat",
+          "zona": "pierna",
+          "indicacion": "Cadera arriba, arrastrá los talones hacia la cola con la toalla.",
+          "como": [
+            "Acostado boca arriba en piso liso, fuera del mat, con los talones sobre la toalla.",
+            "Subí la cadera como en un puente de glúteo.",
+            "Con la cadera arriba, estirá las piernas deslizando la toalla y volvé arrastrando los talones hacia la cola.",
+            "Bajá la cadera solo al terminar la serie."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "rangoCorto", "nombre": "Rango corto", "como": "Igual, sin estirar del todo las piernas." }
+          ],
+          "fases": {
+            "base":       { "texto": "8", "tipo": "reps", "min": 8, "max": 8 },
+            "desarrollo": { "texto": "10", "tipo": "reps", "min": 10, "max": 10 },
+            "choque":     { "texto": "A una pierna, 6 PP", "tipo": "reps", "min": 6, "max": 6, "lado": "PP" }
+          }
+        },
+        {
+          "id": "caminata",
+          "nombre": "Caminata lateral con la banda corta arriba de las rodillas",
+          "zona": "pierna",
+          "lado": "PL",
+          "pasos": true,
+          "indicacion": "Semiflexionado, pasos cortos de costado sin que las rodillas se cierren.",
+          "como": [
+            "Banda corta arriba de las rodillas, pies al ancho de la cadera.",
+            "Doblá un poco las rodillas y llevá la cola atrás.",
+            "Dá pasos cortos hacia un costado sin juntar los pies del todo.",
+            "Las rodillas empujan hacia afuera contra la banda. Al terminar, volvé hacia el otro lado."
+          ],
+          "videos": [],
+          "alternativas": [
+            { "id": "pasosCortos", "nombre": "Más erguido y con pasos más cortos", "como": "Igual, con las rodillas apenas dobladas y pasos más cortos." }
+          ],
+          "fases": {
+            "base":       { "texto": "12 pasos PL", "tipo": "reps", "min": 12, "max": 12, "banda": true },
+            "desarrollo": { "texto": "15 pasos PL", "tipo": "reps", "min": 15, "max": 15, "banda": true },
+            "choque":     { "texto": "20 pasos PL", "tipo": "reps", "min": 20, "max": 20, "banda": true }
+          }
+        },
+        {
+          "id": "puenteSilla",
+          "nombre": "Puente de glúteo con el pie elevado en la silla",
+          "zona": "pierna",
+          "indicacion": "Talones sobre la silla, subí la cadera y apretá la cola.",
+          "como": [
+            "Acostado boca arriba con los talones sobre el asiento de la silla.",
+            "Empujá con los talones y subí la cadera hasta alinear rodillas, cadera y hombros.",
+            "Apretá la cola arriba y bajá despacio.",
+            "A una pierna: un solo talón en la silla y la otra pierna en el aire."
+          ],
+          "videos": [
+            { "titulo": "Puente de glúteo con el pie elevado", "url": "https://youtube.com/shorts/1F2K75DBgqA" }
+          ],
+          "alternativas": [
+            { "id": "piso", "nombre": "Con los pies en el piso", "como": "Puente de glúteo común, con los pies apoyados en el mat." }
+          ],
+          "fases": {
+            "base":       { "texto": "12", "tipo": "reps", "min": 12, "max": 12 },
+            "desarrollo": { "texto": "15", "tipo": "reps", "min": 15, "max": 15 },
+            "choque":     { "texto": "A una pierna, 10 PP", "tipo": "reps", "min": 10, "max": 10, "lado": "PP" }
+          }
+        },
+        {
+          "id": "planchaLateral",
+          "nombre": "Plancha lateral",
+          "zona": null,
+          "lado": "PL",
+          "indicacion": "Codo debajo del hombro, cadera arriba, cuerpo en línea.",
+          "como": [
+            "De costado sobre el mat, apoyá el antebrazo con el codo debajo del hombro.",
+            "Pies uno encima del otro o uno delante del otro.",
+            "Subí la cadera hasta que el cuerpo quede recto y no la dejes caer.",
+            "Al terminar el tiempo, cambiá de lado."
+          ],
+          "videos": [
+            { "titulo": "Plancha lateral", "url": "https://youtube.com/shorts/BaXXJfqezms" }
+          ],
+          "alternativas": [
+            { "id": "rodilla", "nombre": "Con la rodilla de abajo apoyada", "como": "Igual, con la rodilla de abajo doblada y apoyada en el mat." }
+          ],
+          "fases": {
+            "base":       { "texto": "20\" PL", "tipo": "tiempo", "segundos": 20 },
+            "desarrollo": { "texto": "30\" PL", "tipo": "tiempo", "segundos": 30 },
+            "choque":     { "texto": "40\" PL", "tipo": "tiempo", "segundos": 40 }
+          }
+        },
+        {
+          "id": "lumbar",
+          "nombre": "Extensión lumbar alterna",
+          "zona": null,
+          "lado": "PL",
+          "alterna": true,
+          "indicacion": "Boca abajo, subí brazo y pierna opuestos sin girar la cadera.",
+          "como": [
+            "Acostado boca abajo en el mat, brazos estirados hacia adelante.",
+            "Subí a la vez un brazo y la pierna contraria, sin girar la cadera.",
+            "Bajá y repetí con el otro brazo y la otra pierna, alternando.",
+            "Contá por lado."
+          ],
+          "videos": [
+            { "titulo": "Extensión lumbar alterna", "url": "https://youtube.com/shorts/RQWa65OyyWQ" }
+          ],
+          "alternativas": [
+            { "id": "soloPiernas", "nombre": "Solo piernas", "como": "Igual, con los brazos apoyados bajo la frente y subiendo solo las piernas, alternando." }
+          ],
+          "fases": {
+            "base":       { "texto": "8 PL", "tipo": "reps", "min": 8, "max": 8 },
+            "desarrollo": { "texto": "Pausa de 3\" arriba, 10 PL", "tipo": "reps", "min": 10, "max": 10, "ritmo": [ { "paso": "subir", "s": 1 }, { "paso": "pausa", "s": 3 }, { "paso": "bajar", "s": 1 } ] },
+            "choque":     { "texto": "12 PL", "tipo": "reps", "min": 12, "max": 12 }
+          }
+        }
+      ]
+    }
+  },
+
+  "desafio": {
+    "titulo": "Desafío, semana 11",
+    "completado": "¡Programa completado! Cumpliste todas las metas.",
+    "noCompletado": "No llegaste a todas las metas. Te propongo repetir la fase Choque.",
+    "pruebas": [
+      { "id": "flexiones", "nombre": "Flexiones completas seguidas", "meta": "12", "tipo": "reps", "objetivo": 12, "zona": "brazo", "videos": [ { "titulo": "Flexiones completas", "url": "https://youtube.com/shorts/l0VuGojWLas" } ] },
+      { "id": "pica", "nombre": "Flexiones en pica", "meta": "10", "tipo": "reps", "objetivo": 10, "zona": "brazo", "videos": [] },
+      { "id": "bulgara", "nombre": "Sentadilla búlgara sin dolor", "meta": "12 PP", "tipo": "reps", "objetivo": 12, "lado": "PP", "sinDolor": true, "zona": "pierna", "videos": [] },
+      { "id": "plancha", "nombre": "Plancha", "meta": "60\"", "tipo": "tiempo", "objetivo": 60, "zona": null, "videos": [ { "titulo": "Plancha", "url": "https://youtube.com/shorts/cvxg6bM2Ep8" } ] },
+      { "id": "pared", "nombre": "Sentadilla isométrica en pared", "meta": "60\"", "tipo": "tiempo", "objetivo": 60, "zona": "pierna", "videos": [ { "titulo": "Sentadilla isométrica", "url": "https://youtube.com/shorts/cTe7hRu-t_c" } ] }
+    ]
+  }
+}
