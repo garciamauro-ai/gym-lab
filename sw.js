@@ -1,8 +1,8 @@
 // GYM LAB: funciona sin conexión. Primero intenta la red (para ver los cambios) y si no hay, usa la copia guardada.
-const CACHE = 'gymlab-v2';
+const CACHE = 'gymlab-v3';
 const ARCHIVOS = [
   './', 'index.html', 'estilos.css', 'manifest.json', 'rutina.json',
-  'sonido.js', 'temporizador.js', 'registro.js', 'graficos.js', 'app.js',
+  'sonido.js', 'temporizador.js', 'registro.js', 'nube.js', 'graficos.js', 'app.js',
   'iconos/icono-192.png', 'iconos/icono-512.png', 'iconos/icono-180.png'
 ];
 

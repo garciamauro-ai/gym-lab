@@ -28,7 +28,7 @@ let ritmo = null;        // marcador de ritmo activo
 let wakeLock = null;
 let ex = null;           // estado de la serie en pantalla
 let form = null;         // formulario en pantalla
-let ui = { tab: 'sesiones', progresoId: null };
+let ui = { tab: 'sesiones', progresoId: null, mes: null };
 let alCambio = null;     // qué hacer al terminar el cambio de lado
 
 const D = () => Registro.datos();
@@ -257,11 +257,58 @@ function renderInicio() {
     ${tarjeta}
     ${botones}
     ${medida}
+    ${tarjetaCalendario()}
     <nav class="menu">
       <button class="btn-sec" data-accion="irHistorial">Historial</button>
       <button class="btn-sec" data-accion="irAjustes">Ajustes</button>
     </nav>
   </section>`);
+}
+
+// ---------- Calendario y cuenta regresiva ----------
+
+const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+function tarjetaCalendario() {
+  const d = D();
+  const total = R.ordenSemanal.length * 10;
+  const hechas = d.completado || d.semana >= 11 ? total : (d.semana - 1) * R.ordenSemanal.length + d.indice;
+  const faltan = total - hechas;
+  const hoyTxt = Registro.hoy();
+  if (!ui.mes) ui.mes = hoyTxt.slice(0, 7);
+  const [anio, mes] = ui.mes.split('-').map(Number);
+  const primero = new Date(anio, mes - 1, 1);
+  const dias = new Date(anio, mes, 0).getDate();
+  const corrimiento = (primero.getDay() + 6) % 7; // lunes primero
+  const porFecha = {};
+  for (const ses of d.sesiones) {
+    const f = R.fases.find(x => x.id === ses.fase) || Registro.fase(ses.semana);
+    porFecha[ses.fecha] = f.color;
+  }
+  let celdas = '<span class="cal-vacio"></span>'.repeat(corrimiento);
+  for (let n = 1; n <= dias; n++) {
+    const f = `${ui.mes}-${String(n).padStart(2, '0')}`;
+    const color = porFecha[f];
+    celdas += `<span class="cal-dia${color ? ' hecho' : ''}${f === hoyTxt ? ' hoy' : ''}"${color ? ` style="--c:${color}"` : ''}><span class="cifra">${n}</span></span>`;
+  }
+  const enMes = d.sesiones.filter(x => x.fecha.startsWith(ui.mes)).length;
+  const texto = d.completado ? 'Programa completo'
+    : faltan > 0 ? `Faltan <b>${faltan}</b> ${faltan === 1 ? 'sesión' : 'sesiones'} para el desafío`
+    : '¡Llegó la semana del desafío!';
+  return `<div class="tarjeta calendario">
+    <div class="cuenta">
+      <div class="cuenta-txt"><span>Sesión <b>${Math.min(hechas + 1, total)}</b> de ${total}</span><span>${texto}</span></div>
+      <div class="barra-progreso"><i style="width:${(hechas / total * 100).toFixed(1)}%"></i></div>
+      <div class="datos-fila"><span><b>${Registro.racha()}</b> días de racha</span><span><b>${d.sesiones.length}</b> entrenamientos</span></div>
+    </div>
+    <div class="cal-cabeza">
+      <button class="btn-icono" data-accion="mes" data-delta="-1" aria-label="Mes anterior">${ICO.volver}</button>
+      <b>${MESES[mes - 1]} ${anio}</b>
+      <button class="btn-icono gira" data-accion="mes" data-delta="1" aria-label="Mes siguiente">${ICO.volver}</button>
+    </div>
+    <div class="cal-grilla">${['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(x => `<span class="cal-sem">${x}</span>`).join('')}${celdas}</div>
+    <p class="tenue chico-texto centro-texto">${enMes ? `Este mes: ${enMes} ${enMes === 1 ? 'entrenamiento' : 'entrenamientos'}` : 'Este mes todavía no entrenaste'}</p>
+  </div>`;
 }
 
 // ---------- Chequeo del día siguiente ----------
@@ -342,6 +389,7 @@ function renderGuiado(cual, { sinPreparar = false } = {}) {
     <div class="reloj"><div class="tiempo-grande" id="t">${it.segundos}</div><div class="etiqueta" id="et">${sinPreparar ? 'Ahora' : 'Preparate'}</div></div>
     <p class="como-corto">${esc(it.como)}</p>
     <div class="fila">
+      <button class="btn-sec" data-accion="anteriorGuiado" data-cual="${cual}">Anterior</button>
       <button class="btn-sec" data-accion="pausar" id="b-pausa">Pausar</button>
       <button class="btn-sec" data-accion="saltarGuiado" data-cual="${cual}">Siguiente</button>
     </div>
@@ -409,6 +457,84 @@ function terminarGuiado(cual) {
   } else {
     finalizarSesion();
   }
+}
+
+// Vuelve un paso atrás en el calentamiento o el estiramiento.
+function anteriorGuiado(cual) {
+  const g = guiadoDe(cual);
+  const s = D().enCurso;
+  if (s.gl === 1) {
+    s.gl = 0;
+  } else if (s.gi > 0) {
+    s.gi--;
+    s.gl = 0;
+  } else if (cual === 'calentamiento') {
+    if (s.tipo === 'desafio') { D().enCurso = null; guardar(); mantenerPantalla(false); return renderDesafio(); }
+    s.etapa = 'previa';
+    guardar();
+    return renderPrevia();
+  } else {
+    // Del primer estiramiento se vuelve al cierre del último ejercicio.
+    s.etapa = 'cierre';
+    s.ej = planActual().ejercicios.length - 1;
+    s.serie = planActual().ejercicios[s.ej].series;
+    ex = null;
+    guardar();
+    return renderCierre();
+  }
+  guardar();
+  renderGuiado(cual);
+}
+
+// Texto del botón «Anterior» en la pantalla del ejercicio.
+function textoAnterior() {
+  const s = D().enCurso;
+  const p = planActual();
+  const ej = p.ejercicios[s.ej];
+  if (ej.porLado && ex && ex.lado === 1) return 'Volver al primer lado';
+  if (s.serie > 1) return `Corregir la serie ${s.serie - 1}`;
+  if (s.ej > 0) return 'Volver al ejercicio anterior';
+  return 'Volver al calentamiento';
+}
+
+function anteriorEjercicio() {
+  const s = D().enCurso;
+  const p = planActual();
+  const ej = p.ejercicios[s.ej];
+  limpiar();
+  if (ej.porLado && ex && ex.lado === 1) {
+    ex.lado = 0;
+    return renderEjercicio({ mantener: true });
+  }
+  if (s.serie > 1) return corregirSerie();
+  if (s.ej > 0) {
+    s.ej--;
+    s.serie = p.ejercicios[s.ej].series;
+    s.etapa = 'cierre';
+    ex = null;
+    guardar();
+    return renderCierre();
+  }
+  s.etapa = 'calentamiento';
+  s.gi = R.calentamiento.ejercicios.length - 1;
+  s.gl = 0;
+  ex = null;
+  guardar();
+  renderGuiado('calentamiento');
+}
+
+// Vuelve a la serie anotada antes de la actual, con sus números cargados para corregirla.
+function corregirSerie() {
+  const s = D().enCurso;
+  limpiar();
+  if (s.etapa === 'cierre') {
+    s.etapa = 'ejercicio';
+  } else {
+    s.serie = Math.max(1, s.serie - 1);
+  }
+  guardar();
+  const reg = registroEj(ejActual());
+  renderRegistroSerie(reg.series[s.serie - 1] || null);
 }
 
 function cambioDeLado(despues, texto = '') {
@@ -525,6 +651,7 @@ function renderEjercicio({ mantener = false } = {}) {
       <button class="btn-sec" data-accion="panel" data-panel="como">Cómo se hace</button>
       <button class="btn-sec" data-accion="panel" data-panel="variante">Cambiar variante</button>
     </div>
+    <button class="btn-sec btn-atras" data-accion="anteriorEjercicio">${ICO.volver}<span>${esc(textoAnterior())}</span></button>
     <div class="panel" id="panel-como" ${ex.panel === 'como' ? '' : 'hidden'}>
       <ol class="pasos">${como.map(c => `<li>${esc(c)}</li>`).join('')}</ol>
       ${ej.videos && ej.videos.length ? videosHtml(ej.videos, 'Videos del PDF') : '<p class="tenue">Este ejercicio no tiene video en el PDF.</p>'}
@@ -583,12 +710,19 @@ function finLadoTiempo(seg) {
 
 // ---------- Registro de la serie ----------
 
-function renderRegistroSerie() {
+function renderRegistroSerie(previo = null) {
   const s = D().enCurso;
   const ej = ejActual();
   const o = ej.obj;
   const nLados = ej.porLado ? 2 : 1;
-  form = { reserva: null, banda: D().bandas[ej.id] || 'larga', _req: ['reserva'] };
+  form = { reserva: previo ? previo.reserva : null, banda: (previo && previo.banda) || D().bandas[ej.id] || 'larga', _req: ['reserva'] };
+  if (previo) {
+    ex = { lado: nLados - 1, conteo: [0, 0], completas: 0, rodillas: 0, segundos: [null, null], panel: null };
+    const vals = previo.lados || [previo.segundos != null ? previo.segundos : previo.reps];
+    if (o.tipo === 'tiempo') ex.segundos = [vals[0], vals[1] ?? null];
+    else if (o.tipo === 'mixta') { ex.completas = previo.completas || 0; ex.rodillas = previo.rodillas || 0; }
+    else ex.conteo = [vals[0] || 0, vals[1] || 0];
+  }
   let campos = '';
   if (o.tipo === 'tiempo') {
     form.v = [...Array(nLados).keys()].map(i => ex.segundos[i] ?? o.segundos);
@@ -609,9 +743,9 @@ function renderRegistroSerie() {
     <p class="tenue">Meta: ${esc(o.texto)}</p>
     ${campos}
     <div class="campo"><div class="campo-etiqueta">¿Cuántas más te salían? <span class="tenue">(la fase pide reserva ${ej.reserva})</span></div>
-      ${chips('reserva', [0, 1, 2, 3, 4], null)}</div>
+      ${chips('reserva', [0, 1, 2, 3, 4], form.reserva)}</div>
     ${ej.usaBanda ? `<div class="campo"><div class="campo-etiqueta">Banda</div>${chips('banda', BANDAS, form.banda)}</div>` : ''}
-    <button class="btn-principal enorme" id="guardar" data-accion="guardarSerie" disabled>Guardar serie</button>
+    <button class="btn-principal enorme" id="guardar" data-accion="guardarSerie" ${form.reserva == null ? 'disabled' : ''}>Guardar serie</button>
   </section>`);
 }
 
@@ -632,7 +766,7 @@ function guardarSerie() {
     if (ej.porLado) { x.lados = form.v.slice(); x.reps = Math.min(...form.v); } else x.reps = form.v[0];
   }
   if (ej.usaBanda) { x.banda = form.banda; d.bandas[ej.id] = form.banda; }
-  reg.series.push(x);
+  reg.series[s.serie - 1] = x;
   if (s.serie < ej.series) {
     s.serie++;
     s.etapa = 'ejercicio';
@@ -687,6 +821,7 @@ function renderCierre() {
     <label class="campo"><span class="campo-etiqueta">Nota (opcional)</span>
       <textarea id="nota" rows="2" placeholder="Algo para recordar de este ejercicio">${esc(reg.nota)}</textarea></label>
     <button class="btn-principal enorme" id="guardar" data-accion="guardarCierre" ${ej.zona && reg.molestia == null ? 'disabled' : ''}>Seguir</button>
+    <button class="btn-sec btn-atras" data-accion="corregirSerie">${ICO.volver}<span>Corregir la serie ${reg.series.length}</span></button>
   </section>`);
 }
 
@@ -720,6 +855,7 @@ function guardarCierre() {
 // ---------- Descanso ----------
 
 function renderDescanso(seg, sigue) {
+  ex = null;
   mostrar(`<section class="pantalla centro descanso">
     <div class="etiqueta grande">Descanso</div>
     <div class="tiempo-grande" id="t">${fmtSeg(seg)}</div>
@@ -729,6 +865,7 @@ function renderDescanso(seg, sigue) {
       <button class="btn-sec grande" data-accion="sumar15">+15"</button>
       <button class="btn-principal grande" data-accion="saltarDescanso">Saltar</button>
     </div>
+    <button class="btn-sec btn-atras" data-accion="anteriorEjercicio">${ICO.volver}<span>${esc(D().enCurso.serie > 1 ? `Corregir la serie ${D().enCurso.serie - 1}` : 'Corregir el ejercicio anterior')}</span></button>
   </section>`);
   timer = new Cuenta({
     segundos: seg,
@@ -765,6 +902,7 @@ function finalizarSesion() {
   guardar();
   mantenerPantalla(false);
   renderResumen(ses);
+  if (Nube.activa()) Nube.subirSiHay().then(ok => aviso(ok ? 'Progreso guardado en GitHub' : 'Sin conexión: se sube a GitHub la próxima vez'));
 }
 
 function renderResumen(ses) {
@@ -1032,11 +1170,40 @@ function renderAjustes() {
       <button class="btn-sec" data-accion="exportar">Guardar copia</button>
       <label class="btn-sec como-boton">Cargar copia<input type="file" id="archivo-copia" accept=".json,application/json" hidden></label>
     </div>
+    ${tarjetaNube()}
     <div class="tarjeta">
       <button class="btn-peligro" data-accion="borrarTodo">Borrar todo y empezar de nuevo</button>
     </div>
     <p class="tenue centro-texto chico-texto">GYM LAB · by 360 Lab Studio</p>
   </section>`);
+}
+
+function tarjetaNube() {
+  if (!Nube.activa()) {
+    return `<div class="tarjeta nube">
+      <div class="campo-etiqueta">Guardar en GitHub</div>
+      <p class="tenue">Tu progreso se sube solo al terminar cada sesión a un repositorio privado (gym-lab-datos). Si cambiás de teléfono lo bajás desde acá.</p>
+      <p class="tenue">Para activarlo hace falta una llave de GitHub. Se crea una sola vez:</p>
+      <ol class="pasos">
+        <li>Abrí <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">esta página de GitHub</a>.</li>
+        <li>Nombre: GYM LAB. Vencimiento: el más largo que deje.</li>
+        <li>En «Repository access» elegí «Only select repositories» y marcá <b>gym-lab-datos</b>.</li>
+        <li>En «Permissions», «Contents»: <b>Read and write</b>.</li>
+        <li>Tocá «Generate token», copiá la llave y pegala acá.</li>
+      </ol>
+      <input id="llave-gh" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+      <button class="btn-principal" data-accion="guardarLlave">Activar</button>
+    </div>`;
+  }
+  const e = Nube.estado();
+  const ultima = e.ultima ? new Date(e.ultima).toLocaleString('es-AR', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'todavía nunca';
+  return `<div class="tarjeta nube">
+    <div class="campo-etiqueta">Guardar en GitHub</div>
+    <p class="tenue">Se sube solo al terminar cada sesión. Última subida: <b>${esc(ultima)}</b>${e.pendiente ? ' <b>Hay cambios sin subir.</b>' : ''}</p>
+    <button class="btn-sec" data-accion="subirNube">Subir progreso</button>
+    <button class="btn-sec" data-accion="bajarNube">Bajar progreso</button>
+    <button class="btn-texto" data-accion="quitarLlave">Quitar la llave de este teléfono</button>
+  </div>`;
 }
 
 // ---------- Acciones ----------
@@ -1079,10 +1246,12 @@ const acciones = {
   },
 
   salirSesion() {
-    limpiar();
-    mantenerPantalla(false);
-    guardar();
-    irInicio();
+    preguntar('¿Salir de la sesión? Lo que hiciste queda guardado y la seguís desde el inicio.', 'Salir', () => {
+      limpiar();
+      mantenerPantalla(false);
+      guardar();
+      irInicio();
+    }, 'Seguir entrenando');
   },
 
   empezarCalentamiento() {
@@ -1103,6 +1272,12 @@ const acciones = {
   },
 
   saltarGuiado(el) { limpiar(); siguienteGuiado(el.dataset.cual); },
+
+  anteriorGuiado(el) { limpiar(); anteriorGuiado(el.dataset.cual); },
+
+  anteriorEjercicio() { anteriorEjercicio(); },
+
+  corregirSerie() { corregirSerie(); },
 
   saltarTodoGuiado(el) { limpiar(); terminarGuiado(el.dataset.cual); },
 
@@ -1321,6 +1496,56 @@ const acciones = {
 
   irDesafio() { renderDesafio(); },
 
+  mes(el) {
+    const [a, m] = ui.mes.split('-').map(Number);
+    const f = new Date(a, m - 1 + Number(el.dataset.delta), 1);
+    ui.mes = `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}`;
+    renderInicio();
+  },
+
+  async guardarLlave(el) {
+    const token = ($('#llave-gh').value || '').trim();
+    if (!token) return aviso('Pegá la llave primero');
+    el.disabled = true;
+    try {
+      await Nube.probar(token);
+      Nube.guardarLlave(token);
+      aviso('Llave guardada');
+      renderAjustes();
+      if (D().sesiones.length) Nube.subirSiHay().then(() => renderAjustes());
+    } catch (err) {
+      el.disabled = false;
+      aviso(err.message.startsWith('La llave') ? err.message : 'No se pudo conectar con GitHub');
+    }
+  },
+
+  async subirNube(el) {
+    el.disabled = true;
+    try { await Nube.subir(); aviso('Progreso guardado en GitHub'); }
+    catch (err) { aviso(err.message.startsWith('GitHub') || err.message.startsWith('La llave') ? err.message : 'Sin conexión'); }
+    renderAjustes();
+  },
+
+  async bajarNube(el) {
+    el.disabled = true;
+    let texto;
+    try { texto = await Nube.bajar(); }
+    catch (err) { el.disabled = false; return aviso(err.message.startsWith('Todavía') || err.message.startsWith('La llave') || err.message.startsWith('GitHub') ? err.message : 'Sin conexión'); }
+    el.disabled = false;
+    preguntar('Lo que está en GitHub reemplaza los datos de este teléfono. ¿Seguir?', 'Sí, bajar', () => {
+      try {
+        Registro.importar(texto);
+        Sonido.configurar(D().ajustes);
+        aviso('Progreso bajado de GitHub');
+        renderInicio();
+      } catch (e) { aviso('Lo que está en GitHub no se pudo leer'); }
+    });
+  },
+
+  quitarLlave() {
+    preguntar('Se borra la llave de este teléfono. Tus datos no se tocan.', 'Quitar', () => { Nube.quitarLlave(); renderAjustes(); });
+  },
+
   calentarDesafio() {
     D().enCurso = { tipo: 'desafio', semana: D().semana, inicio: Date.now(), etapa: 'calentamiento', gi: 0, gl: 0, registros: [] };
     guardar();
@@ -1413,6 +1638,7 @@ async function arrancar() {
   Sonido.configurar(D().ajustes);
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
   irInicio();
+  if (Nube.activa() && Nube.estado().pendiente) Nube.subirSiHay().then(ok => ok && aviso('Progreso guardado en GitHub'));
 }
 
 arrancar();
